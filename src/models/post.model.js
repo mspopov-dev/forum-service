@@ -35,7 +35,17 @@ const postSchema = new Schema({
     }
 }, {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v;
+            delete ret.createdAt;
+            delete ret.updatedAt;
+            ret.dateCreated = ret.dateCreated.toISOString().slice(0,19);
+        }
+    }
 })
 
 export default model('Post', postSchema, 'posts');
