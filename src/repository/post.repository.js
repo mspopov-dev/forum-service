@@ -12,3 +12,11 @@ export const findById = async (id) => {
     }
     return post;
 }
+
+export const deletePost = async (id) => {
+    const post = await Post.findByIdAndDelete(id);
+    if(!post) {
+        throw new Error('Post not found');
+    }
+    return post;
+}

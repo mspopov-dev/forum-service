@@ -11,7 +11,8 @@ export const getPostById = async (id) => {
 }
 
 export const deletePost = async (id) => {
-    // TODO
+    const post = await postRepository.deletePost(id);
+    return post;
 }
 
 export const addLike = async (id) => {
