@@ -29,12 +29,17 @@ export const addLike = async (id) => {
     return post;
 }
 
-export const getPostsByAuthor = async (author) => {
-    // TODO
+export const getPostsByAuthor = async (author) => await postRepository.findPostsByAuthor(author);
+
 }
 
 export const addComment = async (id, commenter, content) => {
-    // TODO
+    const comment = {user: commenter, message: content};
+    const post = await postRepository.addComment(id, comment);
+    if (!post) {
+        throw new Error(`Post with id = ${id} not found`);
+    }
+    return post;
 }
 
 export const getPostsByTags = async (tagsString) => {
@@ -47,3 +52,6 @@ export const getPostsByPeriod = async (dateFrom, dateTo) => {
 
 export const updatePost = async (id, data) => {
 // TODO
+
+}
+
