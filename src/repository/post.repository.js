@@ -5,18 +5,9 @@ export const createPost = async (postData) => {
     // return post.save();
     return Post.create(postData);
 }
-export const findById = async (id) => {
-    return Post.findById(id);
-    if(!post) {
-        throw new Error('Post not found');
-    }
-    return post;
-}
 
-export const deletePost = async (id) => {
-    const post = await Post.findByIdAndDelete(id);
-    if(!post) {
-        throw new Error('Post not found');
-    }
-    return post;
-}
+export const findPostById = async (id) => Post.findById(id).exec();
+
+export const deletePost = async (id) => Post.findByIdAndDelete(id).exec();
+
+export const addLike = async (id) => Post.findByIdAndUpdate(id, { $inc: { likes: 1 } }, { returnDocument: 'after' }).exec();
