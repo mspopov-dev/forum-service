@@ -51,7 +51,11 @@ export const getPostsByPeriod = async (dateFrom, dateTo) => await postRepository
 
 
 export const updatePost = async (id, data) => {
-// TODO
-
+    const post = await postRepository.updatePost(id, data);
+    if (!post) {
+        throw new Error(`Post with id = ${id} not found`);
+    }
+    return post;
 }
+
 
