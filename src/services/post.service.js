@@ -31,7 +31,7 @@ export const addLike = async (id) => {
 
 export const getPostsByAuthor = async (author) => await postRepository.findPostsByAuthor(author);
 
-}
+
 
 export const addComment = async (id, commenter, content) => {
     const comment = {user: commenter, message: content};
@@ -43,12 +43,12 @@ export const addComment = async (id, commenter, content) => {
 }
 
 export const getPostsByTags = async (tagsString) => {
-    // TODO
+    const tags = tagsString.split(',').map(tag => tag.trim());
+    return await postRepository.findPostsByTags(tags);
 }
 
-export const getPostsByPeriod = async (dateFrom, dateTo) => {
-    // TODO
-}
+export const getPostsByPeriod = async (dateFrom, dateTo) => await postRepository.findPostsByPeriod(dateFrom, dateTo);
+
 
 export const updatePost = async (id, data) => {
 // TODO
