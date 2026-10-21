@@ -1,40 +1,33 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import postRoutes from './routes/post.routes.js';
-import config from './configuration/config.js';
-
-const port = process.env.PORT || 8080;
+import express from "express";
+import postRoutes from "./routes/post.routes.js";
+import userRoutes from "./routes/userAccount.routes.js";
+import mongoose from "mongoose";
+import config from "./configuration/config.js";
+import errorHandler from "./middlewares/error.middleware.js";
 
 const app = express();
 
 app.use(express.json());
 
 app.use('/forum', postRoutes);
+app.use('/account', userRoutes);
+app.use(errorHandler);
 
-app.use((req, res) => {
-    res.status(404)
-        .type('text/plain; charset=utf-8')
-        .send('Not found');
-});
+app.use((req, res) => res.status(404).type('text/plain; charset=utf-8').send('Not found')
+);
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(config.mongodb.uri, config.mongodb.db);
+        console.log('Connected to MongoDB');
+    } catch (e) {
+        console.log('Failed to connect to database', e);
+    }
+}
 
 async function startServer() {
-    try {
-        await mongoose.connect(
-            config.mongodb.uri,
-            config.mongodb.db
-        );
-
-        console.log(`Connected to MongoDB: ${mongoose.connection.name}`);
-
-        app.listen(port, () => {
-            console.log(
-                `Server running on port ${port}. Press Ctrl+C to stop.`
-            );
-        });
-    } catch (e) {
-        console.error('Failed to start server:', e);
-        process.exit(1);
-    }
+    await connectDB();
+    app.listen(config.port, () => console.log(`Server running on port ${config.port}. Press Ctrl+C to stop.`));
 }
 
 startServer();

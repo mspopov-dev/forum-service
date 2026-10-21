@@ -1,12 +1,27 @@
-import { Router } from 'express';
-import * as postController from '../controllers/post.controller.js';
+import {Router} from 'express';
+import {
+    createPost,
+    getPostById,
+    deletePost,
+    updatePost,
+    addComment,
+    addLike,
+    getPostsByTags,
+    getPostsByPeriod,
+    getPostsByAuthor,
+} from '../controllers/post.controller.js';
+import validate from '../middlewares/validation.middleware.js';
 
-const postRoutes = Router();
+const router = Router();
 
-postRoutes.post('/post/:author', postController.createPost);
+router.post('/post/:author', validate('createPost'), createPost);
+router.get('/post/:id', getPostById);
+router.delete('/post/:id', deletePost);
+router.patch('/post/:id/like', addLike);
+router.get('/posts/author/:author', getPostsByAuthor);
+router.patch('/post/:id/comment/:commenter', validate('addComment'), addComment);
+router.get('/posts/tags', getPostsByTags);
+router.get('/posts/period', validate('dateFormatPeriod', 'query'), getPostsByPeriod);
+router.patch('/post/:id', validate('updatePost'), updatePost);
 
-postRoutes.get('/post/:id', postController.getPostById);
-
-postRoutes.delete('/post/:id', postController.deletePost);
-
-export default postRoutes;
+export default router;
