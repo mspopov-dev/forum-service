@@ -10,8 +10,18 @@ export const register = async (req, res, next) => {
 }
 
 export const login = async (req, res, next) => {
-    // TODO: Implement user login logic
-    throw new Error('Not implemented');
+    try {
+        const userAccount = await userAccountService.getUser(req.body.login);
+        if (userAccount.password !== req.body.password) {
+            throw new Error('Invalid credentials');
+        }
+        return res.json({
+            login: userAccount.login,
+            roles: userAccount.roles
+        });
+    } catch (e) {
+        return next(e);
+    }
 }
 
 export const deleteUser = async (req, res, next) => {
@@ -51,8 +61,12 @@ export const deleteRole = async (req, res, next) => {
 }
 
 export const changePassword = async (req, res, next) => {
-    // TODO: Implement password change logic
-    throw new Error('Not implemented');
+    try {
+        const userAccount = await userAccountService.changePassword(req.body.login, req.body.newPassword);
+        return res.json(userAccount);
+    } catch (e) {
+        return next(e);
+    }
 }
 
 export const getUser = async (req, res, next) => {

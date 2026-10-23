@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-// TODO Add to schemas validation to user account
+
 const schemas = {
     createPost: Joi.object({
         title: Joi.string().required(),
@@ -18,6 +18,22 @@ const schemas = {
     dateFormatPeriod: Joi.object({
         dateFrom: Joi.date().iso().required(),
         dateTo: Joi.date().iso().required().greater(Joi.ref('dateFrom'))
+    }),
+    register: Joi.object({
+        login: Joi.string().required(),
+        password: Joi.string().required()
+    }),
+    login: Joi.object({
+        login: Joi.string().required(),
+        password: Joi.string().required()
+    }),
+    updateUser: Joi.object({
+        password: Joi.string(),
+        roles: Joi.array().items(Joi.string())
+    }),
+    changePassword: Joi.object({
+        login: Joi.string().required(),
+        newPassword: Joi.string().required()
     })
 }
 
