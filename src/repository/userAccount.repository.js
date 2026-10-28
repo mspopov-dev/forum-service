@@ -1,6 +1,9 @@
 import UserAccount from '../models/userAccount.model.js';
 
-export const addUser = async (user) => UserAccount.create(user);
+export const addUser = async (user) => {
+    const userAccount = new UserAccount(user);
+    return userAccount.save();
+}
 
 export const removeUser = async (login) => UserAccount.findByIdAndDelete(login, {returnDocument: 'after'}).exec();
 
@@ -12,6 +15,4 @@ export const addRole = async (login, role) => UserAccount.findByIdAndUpdate(logi
 
 export const removeRole = async (login, role) => UserAccount.findByIdAndUpdate(login,{$pull: {roles: role}}, {returnDocument: 'after'}).select('-firstName -lastName').exec();
 
-export const changePassword = async (login, newPassword) => {
-    // TODO: Implement user password change logic
-}
+export const changePassword = async (login, newPassword)  => UserAccount.findByIdAndUpdate(login, {password: newPassword}, {returnDocument: 'after'}).exec();
